@@ -1,13 +1,14 @@
 #!/bin/sh
 #Script by FordSenpai
 
-wget -O - https://swupdate.openvpn.net/repos/repo-public.gpg|apt-key add -
+apt update && apt -y install ca-certificates wget net-tools gnupg
+wget -qO - https://as-repository.openvpn.net/as-repo-public.gpg | apt-key add -
 sleep 2
-echo "deb http://build.openvpn.net/debian/openvpn/release/2.4 stretch main" > /etc/apt/sources.list.d/openvpn-aptrepo.list
+echo "deb http://as-repository.openvpn.net/as/debian buster main">/etc/apt/sources.list.d/openvpn-as-repo.list
 #Requirement
 apt update
 apt upgrade -y
-apt install openvpn nginx php7.0-fpm stunnel4 privoxy squid3 dropbear easy-rsa vnstat ufw build-essential fail2ban zip -y
+apt install openvpn-as nginx php7.0-fpm stunnel4 privoxy squid3 dropbear easy-rsa vnstat ufw build-essential fail2ban zip -y
 
 # initializing var
 MYIP=$(wget -qO- ipv4.icanhazip.com);
