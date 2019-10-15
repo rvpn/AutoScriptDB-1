@@ -186,6 +186,7 @@ screen -AmdS badvpn badvpn-udpgw --listen-addr 127.0.0.1:7300
 
 #install OpenVPN
 cp -r /usr/share/easy-rsa/ /etc/openvpn
+mkdir /etc/openvpn/easy-rsa
 mkdir /etc/openvpn/easy-rsa/keys
 
 # replace bits
