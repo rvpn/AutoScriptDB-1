@@ -28,7 +28,7 @@
 <h3 align="center">Installation (Default Version)</h3>
 
   ```html
-wget https://raw.githubusercontent.com/johndesu090/AutoScriptDebianStretch/master/DebianBuster && chmod +x DebianBuster && ./DebianBuster
+wget https://raw.githubusercontent.com/johndesu090/AutoScriptDebianBuster/master/DebianBuster && chmod +x DebianBuster && ./DebianBuster
   ```
 
 <h3 align="center">Installation LEMP Stack Webserver</h3>
