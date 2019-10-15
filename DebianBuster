@@ -8,7 +8,19 @@ echo "deb http://as-repository.openvpn.net/as/debian buster main">/etc/apt/sourc
 #Requirement
 apt update
 apt upgrade -y
-apt install openvpn-as nginx php7.0-fpm stunnel4 privoxy squid3 dropbear easy-rsa vnstat ufw build-essential fail2ban zip -y
+apt install openvpn-as -y
+apt install nginx -y
+apt install php7.0-fpm -y
+apt install stunnel4 -y
+apt install privoxy -y
+apt install squid3 -y
+apt install dropbear -y
+apt install easy-rsa -y
+apt install vnstat -y
+apt install ufw -y
+apt install build-essential -y
+apt install fail2ban -y
+apt install zip -y
 
 # initializing var
 MYIP=$(wget -qO- ipv4.icanhazip.com);
