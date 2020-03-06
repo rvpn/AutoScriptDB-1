@@ -569,7 +569,7 @@ acl CONNECT method CONNECT
 acl GET method GET
 acl PUT method PUT
 acl POST method POST
-acl SSH dst IPADD-IPADD2/32
+acl SSH dst IPADD-IPADD/32
 http_access allow SSH
 http_access allow localnet
 http_access allow manager localhost
@@ -588,7 +588,6 @@ mySquid
  sed -i "s|Squid_Port1|$Squid_Port1|g" /etc/squid/squid.conf
  sed -i "s|Squid_Port2|$Squid_Port2|g" /etc/squid/squid.conf
  sed -i "s|IPADD|$IPADDR|g" /etc/squid/squid.conf
- sed -i "s|IPADD2|$IPADDR|g" /etc/squid/squid.conf
 
  # Starting Proxy server
  echo -e "Restarting proxy server.."
