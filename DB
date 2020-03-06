@@ -1164,7 +1164,7 @@ fi
  echo -e " OpenSSH: $SSH_Port1, $SSH_Port2"
  echo -e " Stunnel: $Stunnel_Port1, $Stunnel_Port2"
  echo -e " DropbearSSH: $Dropbear_Port1, $Dropbear_Port2"
- echo -e " Privoxy: $$Privoxy_Port2"
+ echo -e " Privoxy: $Privoxy_Port2"
  echo -e " Squid: $Privoxy_Port1"
  echo -e " OpenVPN: $OpenVPN_Port1"
  echo -e " NGiNX: $OvpnDownload_Port"
