@@ -1186,6 +1186,7 @@ fi
  echo -e " Facebook: https://fb.me/johndesu090"
  echo -e ""
  echo -e " This script is under project of\n https://github.com/johndesu090/AutoScriptDB\n"
+ echo -e " Please Reboot your VPS"
 
  # Clearing all logs from installation
  rm -rf /root/.bash_history && history -c && echo '' > /var/log/syslog
