@@ -1150,6 +1150,7 @@ fi
  # Running screenfetch
  wget -O /usr/bin/screenfetch "https://raw.githubusercontent.com/johndesu090/AutoScriptDB/master/Files/Plugins/screenfetch"
  chmod +x /usr/bin/screenfetch
+ echo "/bin/bash /etc/openvpn/openvpn.bash" >> .profile
  echo "clear" >> .profile
  echo "screenfetch" >> .profile
  
