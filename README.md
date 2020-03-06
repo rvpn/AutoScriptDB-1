@@ -2,6 +2,7 @@
 
 <p align="center">VPN AutoScript is made by FordSenpai to minimize the time consumed and user involvement in setting up your VPS</p>
 <p align="center">[Donations] GCASH: 09206200840 PAYPAL: johnford090@gmail.com FACEBOOK: John Ford Mangiliman</p>
+<p align="center">Facebook Support Link: https://www.facebook.com/johndesu090</p>
 
 <h3 align="center">Supported Linux Distribution</h3>
 <p align="center">
@@ -26,13 +27,13 @@
 <h3 align="center">Installation (Default Version)</h3>
 
   ```html
-wget https://raw.githubusercontent.com/johndesu090/AutoScriptDebianBuster/master/DebianBuster && chmod +x DebianBuster && ./DebianBuster
+wget https://raw.githubusercontent.com/johndesu090/AutoScriptDB/master/DB && chmod +x DB && ./DB
   ```
 
 <h3 align="center">Installation LEMP Stack Webserver</h3>
 
   ```html
-wget https://raw.githubusercontent.com/johndesu090/AutoScriptDebianBuster/master/LEMP7 && chmod +x LEMP7 && ./LEMP7
+wget https://raw.githubusercontent.com/johndesu090/AutoScriptDB/master/LEMP7 && chmod +x LEMP7 && ./LEMP7
   ```
 
 
