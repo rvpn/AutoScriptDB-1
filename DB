@@ -22,8 +22,8 @@ SSH_Port2='226'
 SSH_Banner='https://raw.githubusercontent.com/johndesu090/AutoScriptDB/master/Files/Plugins/banner'
 
 # Dropbear Ports
-Dropbear_Port1='442'
-Dropbear_Port2='445'
+Dropbear_Port1='445'
+Dropbear_Port2='442'
 
 # Stunnel Ports
 Stunnel_Port1='443' # through Dropbear
