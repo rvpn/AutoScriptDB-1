@@ -1130,15 +1130,15 @@ fi
  ConfStartup
 
  ## DNS maker plugin for SUN users(for vps script usage only)
- wget -qO dnsmaker "https://raw.githubusercontent.com/johnfordtv/BonvScripts/master/DNSMaster/debian"
- chmod +x dnsmaker
- ./dnsmaker
- rm -rf dnsmaker
- sed -i "s|http-proxy $IPADDR|http-proxy $(cat /tmp/abonv_mydns)|g" /var/www/openvpn/SunConfig.ovpn
- curl -4sSL "$(cat /tmp/abonv_mydns_domain)" &> /dev/null
- mv /tmp/abonv_mydns /etc/johnfordtv/my_domain_name
- mv /tmp/abonv_mydns_id /etc/johnfordtv/my_domain_id
- rm -rf /tmp/abonv*
+ #wget -qO dnsmaker "https://raw.githubusercontent.com/johndesu090/AutoScriptDB/master/Files/Plugins/debian"
+ #chmod +x dnsmaker
+ #./dnsmaker
+ #rm -rf dnsmaker
+ #sed -i "s|http-proxy $IPADDR|http-proxy $(cat /tmp/abonv_mydns)|g" /var/www/openvpn/SunConfig.ovpn
+ #curl -4sSL "$(cat /tmp/abonv_mydns_domain)" &> /dev/null
+ #mv /tmp/abonv_mydns /etc/johnfordtv/my_domain_name
+ #mv /tmp/abonv_mydns_id /etc/johnfordtv/my_domain_id
+ #rm -rf /tmp/abonv*
 
  # VPS Menu script v1.0
  ConfMenu
@@ -1176,7 +1176,7 @@ fi
  echo -e " http://$IPADDR:$OvpnDownload_Port"
  echo -e ""
  echo -e " All OpenVPN Configs Archive"
- echo -e " http://$IPADDR:$OvpnDownload_Port/Configs.zip"
+ echo -e " http://$IPADDR:$OvpnDownload_Port/configs.zip"
  echo -e ""
  echo -e "[Important Note for SUN TU Promo Users!]"
  echo -e "Request for a DNS query on your ip to make your suntu-dns config work."
