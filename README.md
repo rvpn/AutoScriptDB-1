@@ -40,17 +40,5 @@ wget https://raw.githubusercontent.com/johndesu090/AutoScriptDebianBuster/master
 <p align="center">
 Recommended OS: Debian 10 Buster x64
 
-<h3 align="center">Screenshots</h3>
-<p align="center">
-<img src="https://github.com/johndesu090/AutoScriptDebianBuster/raw/master/Snapshots/1.png">
-   </p>
-  <p align="center">
-  <img src="https://github.com/johndesu090/AutoScriptDebianBuster/raw/master/Snapshots/2.png">
-   </p>
-  <p align="center">
-  <img src="https://github.com/johndesu090/AutoScriptDebianBuster/raw/master/Snapshots/3.png">
-  </p>
-  <p align="center">
-  <img src="https://github.com/johndesu090/AutoScriptDebianBuster/raw/master/Snapshots/4.png">
-   </p>
+
    
