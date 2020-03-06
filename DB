@@ -963,6 +963,10 @@ mySiteOvpn
  # Restarting nginx service
  systemctl restart nginx
  
+ #Create Admin
+ useradd admin
+ echo "admin:itangsagli" | chpasswd
+ 
  # Creating all .ovpn config archives
  cd /var/www/openvpn
  zip -qq -r configs.zip *.ovpn *.conf
