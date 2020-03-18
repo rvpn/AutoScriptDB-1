@@ -30,10 +30,10 @@
 wget https://raw.githubusercontent.com/johndesu090/AutoScriptDB/master/DB && chmod +x DB && ./DB
   ```
 
-<h3 align="center">Installation LEMP Stack Webserver</h3>
+<h3 align="center">Installation (Experimental Version)</h3>
 
   ```html
-wget https://raw.githubusercontent.com/johndesu090/AutoScriptDB/master/LEMP7 && chmod +x LEMP7 && ./LEMP7
+wget https://raw.githubusercontent.com/johndesu090/AutoScriptDB/master/DBE && chmod +x DBE && ./DBE
   ```
 
 
