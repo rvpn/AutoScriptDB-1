@@ -563,7 +563,11 @@ EOFipt
  systemctl enable openvpn@server_udp
 
 }
+function InsProxy(){
 
+ # Removing Duplicate privoxy config
+ rm -rf /etc/privoxy/config*
+ 
  # Creating Privoxy server config using cat eof tricks
  cat <<'myPrivoxy' > /etc/privoxy/config
 # My Privoxy Server Config
@@ -598,7 +602,6 @@ myPrivoxy
  sed -i "s|Privoxy_Port1|$Privoxy_Port1|g" /etc/privoxy/config
  sed -i "s|Privoxy_Port2|$Privoxy_Port2|g" /etc/privoxy/config
 
-function InsProxy(){
  # Removing Duplicate Squid config
  rm -rf /etc/squid/squid.con*
  
@@ -1075,15 +1078,15 @@ function ScriptMessage(){
 
 
 
-#############################
-#############################
-## Installation Process
-#############################
+#############################################
+#############################################
+########## Installation Process##############
+#############################################
 ## WARNING: Do not modify or edit anything
 ## if you did'nt know what to do.
 ## This part is too sensitive.
-#############################
-#############################
+#############################################
+#############################################
 
  # First thing to do is check if this machine is Debian
  source /etc/os-release
