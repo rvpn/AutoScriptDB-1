@@ -732,6 +732,7 @@ auth-nocache
 cipher none
 keysize 0
 comp-lzo
+redirect-gateway def1
 setenv CLIENT_CERT 0
 reneg-sec 0
 verb 1
@@ -774,6 +775,7 @@ auth-nocache
 cipher none
 keysize 0
 comp-lzo
+redirect-gateway def1
 setenv CLIENT_CERT 0
 reneg-sec 0
 verb 1
