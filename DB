@@ -787,15 +787,12 @@ remote-cert-tls server
 connect-retry infinite
 resolv-retry infinite
 nobind
-tun-mtu 1500
-mssfix 1460
 persist-key
 persist-tun
 auth-user-pass
 auth none
 auth-nocache
 cipher none
-keysize 0
 comp-lzo
 redirect-gateway def1
 setenv CLIENT_CERT 0
@@ -829,16 +826,13 @@ resolv-retry infinite
 float
 fast-io
 nobind
-tun-mtu 1500
-mssfix 1460
 persist-key
 persist-remote-ip
 persist-tun
-auth-user-pass
+auth-user-pass 1.auth
 auth none
 auth-nocache
 cipher none
-keysize 0
 comp-lzo
 redirect-gateway def1
 setenv CLIENT_CERT 0
@@ -866,9 +860,6 @@ remote $IPADDR $OpenVPN_TCP_Port
 remote-cert-tls server
 bind
 float
-tun-mtu 1500
-tun-mtu-extra 32
-mssfix 1450
 mute-replay-warnings
 connect-retry-max 9999
 redirect-gateway def1
@@ -882,7 +873,6 @@ auth none
 auth-nocache
 auth-retry interact
 cipher none
-keysize 0
 comp-lzo
 reneg-sec 0
 verb 0
