@@ -1,4 +1,4 @@
-<h1 align="center">Premium AutoScript Debian Buster<img src="https://img.shields.io/badge/Version-2.0.1-blue.svg"></h1>
+<h1 align="center">Premium AutoScript Debian Buster<img src="https://img.shields.io/badge/Version-2.0.3-blue.svg"></h1>
 
 <p align="center">VPN AutoScript is made by FordSenpai to minimize the time consumed and user involvement in setting up your VPS</p>
 <p align="center">[Donations] GCASH: 09206200840 PAYPAL: johnford090@gmail.com FACEBOOK: John Ford Mangiliman</p>
@@ -19,6 +19,7 @@
   <a><img src="https://img.shields.io/badge/Service-OpenVPN-green.svg"></a>
   <a><img src="https://img.shields.io/badge/Service-Squid3-green.svg"></a>
   <a><img src="https://img.shields.io/badge/Service-Privoxy-green.svg"></a>
+  <a><img src="https://img.shields.io/badge/Service-TCP+UDP-green.svg"></a>
  </p>
 <h3 align="center">Commands</h3>
 <p align="center">
