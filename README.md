@@ -38,7 +38,7 @@ wget https://raw.githubusercontent.com/johndesu090/AutoScriptDB/master/DB && chm
 wget https://raw.githubusercontent.com/johndesu090/AutoScriptDB/master/DBE && chmod +x DBE && ./DBE
   ```
  
-<h3 align="center">Installation (TCP+UDP)</h3>
+<h3 align="center">Installation (Unstable Early Version)</h3>
 
   ```html
 wget https://raw.githubusercontent.com/johndesu090/AutoScriptDB/master/DBM && chmod +x DBM && ./DBM
