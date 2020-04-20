@@ -600,8 +600,8 @@ privoxy
  sed -i "s|IP-ADDRESS|$IPADDR|g" /etc/privoxy/config
  
  # Setting privoxy ports
- #sed -i "s|Privoxy_Port1|$Privoxy_Port1|g" /etc/privoxy/config
- #sed -i "s|Privoxy_Port2|$Privoxy_Port2|g" /etc/privoxy/config
+ sed -i "s|Privoxy_Port1|$Privoxy_Port1|g" /etc/privoxy/config
+ sed -i "s|Privoxy_Port2|$Privoxy_Port2|g" /etc/privoxy/config
 
  # Removing Duplicate Squid config
  rm -rf /etc/squid/squid.con*
