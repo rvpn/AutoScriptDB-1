@@ -26,11 +26,6 @@ fi
 # VAR
 MYIP=$(wget -qO- ipv4.icanhazip.com);
 
-#Install https transport $ php gpg repo
-apt-get install apt-transport-https lsb-release ca-certificates
-wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
-
 # Go to Root folder
 cd
 
@@ -50,9 +45,14 @@ echo ""
 echo "Okay, that's all I need. We are ready to setup your OCS Panels now"
 read -n1 -r -p "Press any key to continue..."
 
+#Install https transport $ php gpg repo
+apt-get install apt-transport-https lsb-release ca-certificates -y
+wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+
 #apt-get update
 apt-get update -y
-apt-get install nginx
+apt-get install nginx -y
 apt-get install build-essential expect -y
 
 apt-get install -y mysql-server
@@ -89,8 +89,8 @@ mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
 mv /etc/nginx/conf.d/vps.conf /etc/nginx/conf.d/vps.conf.backup 
 wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/nginx.conf" 
 wget -O /etc/nginx/conf.d/johnfordtv.conf "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/vps.conf" 
-sed -i 's/cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php5.6/fpm/php.ini 
-sed -i 's/listen = \/var\/run\/php5-fpm.sock/listen = 127.0.0.1:9000/g' /etc/php5.6/fpm/pool.d/www.conf
+sed -i 's/cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/5.6/fpm/php.ini
+sed -i 's/listen = \/var\/run\/php5.6-fpm.sock/listen = 127.0.0.1:9000/g' /etc/php/5.6/fpm/pool.d/www.conf
 
 useradd -m panel
 mkdir -p /home/panel/html
@@ -103,7 +103,7 @@ service nginx restart
 
 apt-get -y install zip unzip
 cd /home/panel/html
-wget https://www.dropbox.com/s/91wubkz6kump8b2/redpanel.zip
+wget https://www.dropbox.com/s/kmwqk7as8j3tgls/redpanel.zip
 unzip redpanel.zip
 rm -f redpanel.zip
 chown -R www-data:www-data /home/panel/html
@@ -113,17 +113,24 @@ chmod -R g+rw /home/panel/html
 
 #grant privileges on database to root
 so2=$(expect -c "
-spawn mysql -u root -p $DatabaseName < /home/panel/html/database/sshpanel.sql; sleep 3
+spawn mysql -u root -p; sleep 3
 expect \"\";  sleep 3; send \"$DatabasePass\r\"
-expect \"\";  sleep 3; send \"CREATE DATABASE IF NOT EXISTS $DatabaseName;EXIT;\r\"
-expect \"\";  sleep 3; send \"GRANT ALL ON $DatabaseName.* TO 'root'@"localhost";EXIT;\r\"
+expect \"\";  sleep 3; send \"CREATE DATABASE IF NOT EXISTS $DatabaseName;\r\"
+expect \"\";  sleep 3; send \"GRANT ALL ON $DatabaseName.* TO 'root'@"localhost";\r\"
 expect \"\";  sleep 3; send \"FLUSH PRIVILEGES;EXIT;\r\"
 expect eof; ")
 echo "$so2"
 #pass
 
-#modify database
-sed -i "s|DB_PASSWORD=""|DB_PASSWORD="$DatabasePass"|g" /home/panel/html/system/.env
+
+#import sql to database
+so3=$(expect -c "
+spawn mysql -u root -p $DatabaseName < /home/panel/html/database/sshpanel.sql; sleep 3
+expect \"\";  sleep 3; send \"$DatabasePass\r\"
+expect eof; ")
+echo "$so3"
+
+sed -i "s|mypassword|$DatabasePass|g" /home/panel/html/system/.env
 sed -i "s|sshpanel_rev|$DatabaseName|g" /home/panel/html/system/.env
 
 clear
