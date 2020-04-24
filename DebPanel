@@ -68,7 +68,7 @@ expect \"\";  sleep 3; send \"Y\r\"
 expect \"\";  sleep 3; send \"$DatabasePass\r\"
 expect \"\";  sleep 3; send \"$DatabasePass\r\"
 expect \"\";  sleep 3; send \"Y\r\"
-expect \"\";  sleep 3; send \"Y\r\"
+expect \"\";  sleep 3; send \"n\r\"
 expect \"\";  sleep 3; send \"Y\r\"
 expect \"\";  sleep 3; send \"Y\r\"
 expect eof; ")
@@ -78,14 +78,14 @@ echo "$so1"
 #pass
 #pass
 #Y
-#Y
+#n
 #Y
 #Y
 
 chown -R mysql:mysql /var/lib/mysql/
 chmod -R 755 /var/lib/mysql/
 # install php 5.6
-apt-get install php5.6 php5.6-fpm php5.6-cli php5.6-common php5.6-curl php5.6-mbstring php5.6-mysql php5.6-mcrypt php5.6-xml php5.6-ssh2 -y
+apt-get install php5.6 php5.6-fpm php5.6-cli php5.6-common php5.6-curl php5.6-mbstring php5.6-mysql php5.6-mcrypt php5.6-xml php5.6-ssh2 php5.6-bcmath -y
 
 #modify nginx configs
 mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup 
@@ -95,7 +95,7 @@ wget -O /etc/nginx/conf.d/johnfordtv.conf "https://raw.githubusercontent.com/joh
 rm /etc/php/5.6/fpm/php.ini
 rm /etc/php/5.6/fpm/pool.d/www.conf
 wget -O /etc/php/5.6/fpm/php.ini "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/php.ini" 
-wget -O /etc/php/5.6/fpm/pool.d/www.conf "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/nginx.conf" 
+wget -O /etc/php/5.6/fpm/pool.d/www.conf "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/www.conf" 
 
 useradd -m panel
 mkdir -p /home/panel/html
@@ -110,7 +110,7 @@ service nginx restart
 
 apt-get -y install zip unzip
 cd /home/panel/html
-wget https://www.dropbox.com/s/kmwqk7as8j3tgls/redpanel.zip
+wget https://www.dropbox.com/s/rzz2gzrnax6q1rg/redpanel.zip
 unzip redpanel.zip
 rm -f redpanel.zip
 chown -R www-data:www-data /home/panel/html
@@ -138,7 +138,7 @@ expect eof; ")
 echo "$so3"
 
 sed -i "s|mypassword|$DatabasePass|g" /home/panel/html/system/.env
-sed -i "s|sshpanel_rev|$DatabaseName|g" /home/panel/html/system/.env
+sed -i "s|mydatabase|$DatabaseName|g" /home/panel/html/system/.env
 
 clear
 echo "Open Browser, access http://$MYIP/ and fill up the install form!"
