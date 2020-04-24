@@ -8,16 +8,15 @@
 # Facebook: https://fb.me/johndesu090
 # Thanks for using this script
 
-#https transport
-apt-get install apt-transport-https -y
 #add sury repo
 wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 sleep 2
 echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
 #Pre Installation Update
-apt-get install lsb-release ca-certificates -y
 apt-get update -y
 apt-get upgrade -y
+apt-get install apt-transport-https -y
+apt-get install lsb-release ca-certificates -y
 
 if [[ $EUID -ne 0 ]]; then
  echo -e "[\e[31mError\e[0m] This script must be run as root, exiting..."
