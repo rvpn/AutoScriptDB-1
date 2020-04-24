@@ -14,8 +14,11 @@
 # Script name
 MyScriptName='JohnFordTV-Redpanel Script'
 
+# My VPS IP
+MYIP='$(wget -qO- ipv4.icanhazip.com);'
+
 # Password
-DatabasePass='@itangsagli'
+DatabasePass='itangsagli'
 
 # Your Database
 DatabaseName='redpanel'
@@ -51,7 +54,7 @@ function InstUpdates(){
  apt-get install apt-transport-https lsb-release libdbi-perl libecap3 -y
 
  # Installing nginx
- apt-get install nginx
+ apt-get install nginx -y
  
  # Installing a text colorizer
  gem install lolcat
@@ -66,12 +69,17 @@ function InstUpdates(){
  apt-get update
  
  # Installing php 5.6
- apt-get install php5.6 php5.6-fpm php5.6-cli php5.6-common php5.6-curl php5.6-mbstring php5.6-mysql php5.6-mcrypt php5.6-xml php5.6-ssh2 php5.6-bcmath -y
+ apt-get install php5.6 php5.6-fpm php5.6-cli php5.6-mbstring php5.6-mysql php5.6-mcrypt php5.6-xml php5.6-ssh2 -y
 }
 
 function InstMysql(){
- # Installing MariaDB Server
- apt-get install mysql-server -y
+ # Installing mysql server
+ apt-get install mysql-common mariadb-common mysql-client mysql-server -y
+ 
+ 
+ # Set Database Permissions
+ chown -R mysql:mysql /var/lib/mysql/
+ chmod -R 755 /var/lib/mysql/
  
  # mysql_secure_installation
  so1=$(expect -c "
@@ -95,10 +103,6 @@ echo "$so1"
  #n
  #Y
  #Y
- 
- # Set Database Permissions
- chown -R mysql:mysql /var/lib/mysql/
- chmod -R 755 /var/lib/mysql/
  
  # Grant privileges on database to root
 so2=$(expect -c "
