@@ -26,10 +26,16 @@ fi
 # VAR
 MYIP=$(wget -qO- ipv4.icanhazip.com);
 
+#Install https transport $ php gpg repo
+apt-get install apt-transport-https lsb-release ca-certificates
+wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+
 # Go to Root folder
 cd
 
 clear
+echo "JohnFordTV Redpanel Installer"
 echo ""
 echo "I need to ask some questions before starting setup"
 echo "You can leave the default option and just hit enter if you agree with the option"
@@ -46,6 +52,7 @@ read -n1 -r -p "Press any key to continue..."
 
 #apt-get update
 apt-get update -y
+apt-get install nginx
 apt-get install build-essential expect -y
 
 apt-get install -y mysql-server
@@ -74,10 +81,10 @@ echo "$so1"
 
 chown -R mysql:mysql /var/lib/mysql/
 chmod -R 755 /var/lib/mysql/
-# install nginx 5.6
-apt-get -y install nginx php5.6 php5.6-fpm php5.6-cli php5.6-common php5.6-curl php5.6-mbstring php5.6-mysql php5.6-mcrypt php5.6-xml php5.6-ssh2
-rm /etc/nginx/sites-enabled/default
-rm /etc/nginx/sites-available/default
+# install php 5.6
+apt-get install php5.6 php5.6-fpm php5.6-cli php5.6-common php5.6-curl php5.6-mbstring php5.6-mysql php5.6-mcrypt php5.6-xml php5.6-ssh2 -y
+
+#modify nginx configs
 mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup 
 mv /etc/nginx/conf.d/vps.conf /etc/nginx/conf.d/vps.conf.backup 
 wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/nginx.conf" 
