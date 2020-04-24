@@ -8,60 +8,73 @@
 # Facebook: https://fb.me/johndesu090
 # Thanks for using this script
 
-#add sury repo
-wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-sleep 2
-echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
-#Pre Installation Update
-apt-get update -y
-apt-get upgrade -y
-apt-get install apt-transport-https -y
-apt-get install lsb-release ca-certificates -y
+#############################
+#############################
+# Variables (Can be changed depends on your preferred values)
+# Script name
+MyScriptName='JohnFordTV-Redpanel Script'
 
-if [[ $EUID -ne 0 ]]; then
- echo -e "[\e[31mError\e[0m] This script must be run as root, exiting..."
- exit 1
-fi
+# Password
+DatabasePass='@itangsagli'
 
-source /etc/os-release
-if [[ "$ID" != 'debian' ]]; then
- echo -e "[\e[31mError\e[0m] This script is for Debian instance only, exiting..."
- exit 1
-elif [[ "$VERSION_ID" != '9' ]]; then
- echo -e "[\e[31mError\e[0m] This script is for Debian Stretch distribution only, exiting..."
- exit 1
-fi
+# Your Database
+DatabaseName='redpanel'
 
-# VAR
-MYIP=$(wget -qO- ipv4.icanhazip.com);
+# Server local time
+MyVPS_Time='Asia/Manila'
+#############################
+#############################
 
-# Go to Root folder
-cd
 
-clear
-echo "JohnFordTV Redpanel Installer"
-echo ""
-echo "I need to ask some questions before starting setup"
-echo "You can leave the default option and just hit enter if you agree with the option"
-echo ""
-echo "First I need to know the new password of MySQL root user:"
-read -p "Password: " -e -i johnfordtv DatabasePass
-echo ""
-echo "Finally, name the Database Name for OCS Panels"
-echo " Please, use one word only, no special characters other than Underscore (_)"
-read -p " Database Name: " -e -i redpanel DatabaseName
-echo ""
-echo "Okay, that's all I need. We are ready to setup your OCS Panels now"
-read -n1 -r -p "Press any key to continue..."
+#############################
+#############################
+## All function used for this script
+#############################
+## WARNING: Do not modify or edit anything
+## if you did'nt know what to do.
+## This part is too sensitive.
+#############################
+#############################
 
-#intall nginx and build essential
-apt-get install nginx -y
-apt-get install build-essential expect -y
+function InstUpdates(){
+ export DEBIAN_FRONTEND=noninteractive
+ apt-get update
+ apt-get upgrade -y
+ 
+ # Removing some firewall tools that may affect other services
+ apt-get remove --purge ufw firewalld -y
+ 
+ # Installing some important machine essentials
+ apt-get install nano git wget curl zip unzip tar gzip p7zip-full bc rc openssl cron build-essential expect net-tools screen bzip2 ccrypt lsof -y
+ 
+ # Installing apt-transport-https and needed files
+ apt-get install apt-transport-https lsb-release libdbi-perl libecap3 -y
 
-apt-get install -y mysql-server
+ # Installing nginx
+ apt-get install nginx
+ 
+ # Installing a text colorizer
+ gem install lolcat
 
-#mysql_secure_installation
-so1=$(expect -c "
+ # Trying to remove obsolette packages after installation
+ apt-get autoremove -y
+ 
+ # Installing sury repo by pulling its repository inside sources.list file 
+ wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+ sleep 2
+ echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+ apt-get update
+ 
+ # Installing php 5.6
+ apt-get install php5.6 php5.6-fpm php5.6-cli php5.6-common php5.6-curl php5.6-mbstring php5.6-mysql php5.6-mcrypt php5.6-xml php5.6-ssh2 php5.6-bcmath -y
+}
+
+function InstMysql(){
+ # Installing MariaDB Server
+ apt-get install mysql-server -y
+ 
+ # mysql_secure_installation
+ so1=$(expect -c "
 spawn mysql_secure_installation; sleep 3
 expect \"\";  sleep 3; send \"\r\"
 expect \"\";  sleep 3; send \"Y\r\"
@@ -73,52 +86,21 @@ expect \"\";  sleep 3; send \"Y\r\"
 expect \"\";  sleep 3; send \"Y\r\"
 expect eof; ")
 echo "$so1"
-#\r
-#Y
-#pass
-#pass
-#Y
-#n
-#Y
-#Y
 
-chown -R mysql:mysql /var/lib/mysql/
-chmod -R 755 /var/lib/mysql/
-# install php 5.6
-apt-get install php5.6 php5.6-fpm php5.6-cli php5.6-common php5.6-curl php5.6-mbstring php5.6-mysql php5.6-mcrypt php5.6-xml php5.6-ssh2 php5.6-bcmath -y
-
-#modify nginx configs
-mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup 
-mv /etc/nginx/conf.d/vps.conf /etc/nginx/conf.d/vps.conf.backup 
-wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/nginx.conf" 
-wget -O /etc/nginx/conf.d/johnfordtv.conf "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/vps.conf" 
-rm /etc/php/5.6/fpm/php.ini
-rm /etc/php/5.6/fpm/pool.d/www.conf
-wget -O /etc/php/5.6/fpm/php.ini "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/php.ini" 
-wget -O /etc/php/5.6/fpm/pool.d/www.conf "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/www.conf" 
-
-useradd -m panel
-mkdir -p /home/panel/html
-rm /home/panel/html/index.html
-echo "<?php phpinfo() ?>" > /home/panel/html/info.php
-chown -R www-data:www-data /home/panel/html
-chmod -R g+rw /home/panel/html
-systemctl php5.6-fpm enable
-systemctl nginx enable
-service php5.6-fpm restart
-service nginx restart
-
-apt-get -y install zip unzip
-cd /home/panel/html
-wget https://www.dropbox.com/s/rzz2gzrnax6q1rg/redpanel.zip
-unzip redpanel.zip
-rm -f redpanel.zip
-chown -R www-data:www-data /home/panel/html
-chmod -R g+rw /home/panel/html
-
-
-
-#grant privileges on database to root
+ #\r
+ #Y
+ #password
+ #password
+ #Y
+ #n
+ #Y
+ #Y
+ 
+ # Set Database Permissions
+ chown -R mysql:mysql /var/lib/mysql/
+ chmod -R 755 /var/lib/mysql/
+ 
+ # Grant privileges on database to root
 so2=$(expect -c "
 spawn mysql -u root -p; sleep 3
 expect \"\";  sleep 3; send \"$DatabasePass\r\"
@@ -127,34 +109,132 @@ expect \"\";  sleep 3; send \"GRANT ALL ON $DatabaseName.* TO 'root'@"localhost"
 expect \"\";  sleep 3; send \"FLUSH PRIVILEGES;EXIT;\r\"
 expect eof; ")
 echo "$so2"
-#pass
+}
 
+function InstNginx(){
+ #modify nginx configs
+ mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup 
+ mv /etc/nginx/conf.d/vps.conf /etc/nginx/conf.d/vps.conf.backup 
+ wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/nginx.conf" 
+ wget -O /etc/nginx/conf.d/johnfordtv.conf "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/vps.conf" 
+ rm /etc/php/5.6/fpm/php.ini
+ rm /etc/php/5.6/fpm/pool.d/www.conf
+ wget -O /etc/php/5.6/fpm/php.ini "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/php.ini" 
+ wget -O /etc/php/5.6/fpm/pool.d/www.conf "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/www.conf" 
+ 
+ # Setup dir and permissions
+ useradd -m panel
+ mkdir -p /home/panel/html
+ rm /home/panel/html/index.html
+ echo "<?php phpinfo() ?>" > /home/panel/html/info.php
+ chown -R www-data:www-data /home/panel/html
+ chmod -R g+rw /home/panel/html
+ 
+ # Then restart to take effect
+ systemctl php5.6-fpm enable
+ systemctl nginx enable
+ service php5.6-fpm restart
+ service nginx restart
+}
 
-#import sql to database
+function InstRedpanel(){
+ # Change dir to Webroot
+ cd /home/panel/html
+ 
+ # Pull Redpanel Source Code
+ wget https://www.dropbox.com/s/rzz2gzrnax6q1rg/redpanel.zip
+ 
+ # Deflate redpaneland set permissions
+ unzip redpanel.zip
+ rm -f redpanel.zip
+ chown -R www-data:www-data /home/panel/html
+ chmod -R g+rw /home/panel/html
+}
+
+function InstImpSql(){
+ # Import SQL to Database
 so3=$(expect -c "
 spawn mysql -u root -p $DatabaseName < /home/panel/html/database/sshpanel.sql sleep 3
 expect \"\";  sleep 3; send \"$DatabasePass\r\"
 expect eof; ")
 echo "$so3"
 
-sed -i "s|mypassword|$DatabasePass|g" /home/panel/html/system/.env
-sed -i "s|mydatabase|$DatabaseName|g" /home/panel/html/system/.env
+ # Change Database Credentials on .env
+ sed -i "s|mypassword|$DatabasePass|g" /home/panel/html/system/.env
+ sed -i "s|mydatabase|$DatabaseName|g" /home/panel/html/system/.env
+}
 
-clear
-echo "Open Browser, access http://$MYIP/ and fill up the install form!"
-echo "Click Install and wait for the process to finish!"
+function InstHistory(){
+ # Clear Machine History
+ cd
+ rm -f /root/.bash_history && history -c
+ echo "unset HISTFILE" >> /etc/profile
+}
 
-sleep 3
-echo ""
-read -p "If the above step has been done, please Press [Enter] key to continue...."
-echo ""
-read -p "If you really believe the above step has been done, please Press [Enter] key to continue..."
-echo ""
+function ScriptMessage(){
+ echo -e " (｡◕‿◕｡) $MyScriptName"
+ echo -e ""
+ echo -e "FB.COM/johndesu090"
+ echo -e ""
+}
 
-cd
-rm -f /root/.bash_history && history -c
-echo "unset HISTFILE" >> /etc/profile
+#############################
+#############################
+## Installation Process
+#############################
+## WARNING: Do not modify or edit anything
+## if you did'nt know what to do.
+## This part is too sensitive.
+#############################
+#############################
 
+ # First thing to do is check if this machine is Debian
+ source /etc/os-release
+if [[ "$ID" != 'debian' ]]; then
+ ScriptMessage
+ echo -e "[\e[1;31mError\e[0m] This script is for Debian only, exting..." 
+ exit 1
+fi
+
+ # Now check if our machine is in root user, if not, this script exits
+ # If you're on sudo user, run `sudo su -` first before running this script
+ if [[ $EUID -ne 0 ]];then
+ ScriptMessage
+ echo -e "[\e[1;31mError\e[0m] This script must be run as root, exiting..."
+ exit 1
+fi
+
+ # Begin Installation by Updating and Upgrading machine and then Installing all our wanted packages/services to be install.
+ ScriptMessage
+ sleep 2
+ InstUpdates
+ 
+ # Configure Mysql
+ echo -e "Configuring MySQL..."
+ InstMysql
+ 
+ # Configure Nginx
+ echo -e "Configuring NginX Webserver..."
+ InstNginx
+ 
+ # Configure Redpanel
+ echo -e "Configuring Red Panel Files..."
+ InstRedpanel
+ 
+ # Configure Database
+ echo -e "Configuring Database..."
+ InstImpSql
+ 
+ # Clear history
+ echo -e "Finalizing Installation..."
+ InstHistory
+ 
+ # Setting server local time
+ ln -fs /usr/share/zoneinfo/$MyVPS_Time /etc/localtime
+
+ # Some assistance and startup scripts
+ ScriptMessage
+ sleep 3
 
 # info
 clear
@@ -170,4 +250,4 @@ echo "Installation Log --> /root/log-install.txt" | tee -a log-install.txt
 echo "=======================================================" | tee -a log-install.txt
 cd ~/
 
-#rm -f /root/ocspanel.sh
+rm DebPanel
