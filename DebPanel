@@ -8,6 +8,13 @@
 # Facebook: https://fb.me/johndesu090
 # Thanks for using this script
 
+wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+sleep 2
+echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+#Pre Installation Update
+apt-get install apt-transport-https lsb-release ca-certificates -y
+apt-get update -y
+apt-get upgrade -y
 
 if [[ $EUID -ne 0 ]]; then
  echo -e "[\e[31mError\e[0m] This script must be run as root, exiting..."
@@ -45,13 +52,7 @@ echo ""
 echo "Okay, that's all I need. We are ready to setup your OCS Panels now"
 read -n1 -r -p "Press any key to continue..."
 
-#Install https transport $ php gpg repo
-apt-get install apt-transport-https lsb-release ca-certificates -y
-wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
-
-#apt-get update
-apt-get update -y
+#intall nginx and build essential
 apt-get install nginx -y
 apt-get install build-essential expect -y
 
@@ -145,7 +146,7 @@ sleep 3
 echo ""
 read -p "If the above step has been done, please Press [Enter] key to continue...."
 echo ""
-read -p "If you really believe the above step has been done, please Press [Enter] key to continue..."
+read -p "INSTALLATION COMPLETE!, Press [Enter] key to continue..."
 echo ""
 
 cd
@@ -154,17 +155,17 @@ echo "unset HISTFILE" >> /etc/profile
 
 
 # info
-#clear
-#echo "=======================================================" | tee -a log-install.txt
-#echo "Please login Reseller Panel at http://$MYIP:85" | tee -a log-install.txt
-#echo "" | tee -a log-install.txt
-#echo "Auto Script Installer OCS Panels Mod by Clrkz"  | tee -a log-install.txt
-#echo "             (http://bytehax.blogspot.com/ - fb.com/143Clarkz)           "  | tee -a log-install.txt
-#echo "" | tee -a log-install.txt
-#echo "Thanks " | tee -a log-install.txt
-#echo "" | tee -a log-install.txt
-#echo "Installation Log --> /root/log-install.txt" | tee -a log-install.txt
-#echo "=======================================================" | tee -a log-install.txt
+clear
+echo "=======================================================" | tee -a log-install.txt
+echo "Redpanel is installed at http://$MYIP" | tee -a log-install.txt
+echo "" | tee -a log-install.txt
+echo "Auto Script Installer RedPanel by JohnFordTV"  | tee -a log-install.txt
+echo "        (http://fb.com/johndesu090)         "  | tee -a log-install.txt
+echo "" | tee -a log-install.txt
+echo "[DONATION] GCash: 09206200840 Paypal: johnford090@gmail.com " | tee -a log-install.txt
+echo "" | tee -a log-install.txt
+echo "Installation Log --> /root/log-install.txt" | tee -a log-install.txt
+echo "=======================================================" | tee -a log-install.txt
 cd ~/
 
 #rm -f /root/ocspanel.sh
