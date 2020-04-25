@@ -12,7 +12,7 @@
 #############################
 # Variables (Can be changed depends on your preferred values)
 # Script name
-MyScriptName='JohnFordTV-Redpanel Script'
+MyScriptName='JohnFordTV-OCS Script'
 
 # My VPS IP
 MYIP=$(wget -qO- ipv4.icanhazip.com);
@@ -126,12 +126,16 @@ so2=$(expect -c "
 spawn mysql -u root -p; sleep 3
 expect \"\";  sleep 3; send \"$DatabasePass\r\"
 expect \"\";  sleep 3; send \"CREATE DATABASE IF NOT EXISTS $DatabaseName;\r\"
+expect \"\";  sleep 3; send \"GRANT ALL PRIVILEGES ON $DatabaseName.* TO 'root'@'localhost';\r\"
+expect \"\";  sleep 3; send \"FLUSH PRIVILEGES;\r\"
+expect \"\";  sleep 3; send \"EXIT;\r\"
 expect eof; ")
 echo "$so2"
 
  # Use MySQL Plugin
  so3=$(expect -c "
 spawn mysql -u root -p; sleep 3
+expect \"\";  sleep 3; send \"$DatabasePass\r\"
 expect \"\";  sleep 3; send \"use mysql;\r\"
 expect \"\";  sleep 3; send \"update user set plugin='' where User='root';\r\"
 expect \"\";  sleep 3; send \"flush privileges;\r\"
@@ -165,7 +169,7 @@ function InstNginx(){
 
 function InstPanel(){
  
- # Pull Redpanel Source Code
+ # Pull OCS Source Code
  wget -O /home/panel/html/debianvpn.zip https://raw.githubusercontent.com/johndesu090/johnfordtv/master/debianvpn.zip
  sleep 2
  
@@ -255,7 +259,7 @@ fi
  echo -e "Configuring NginX Webserver..."
  InstNginx
  
- # Configure Redpanel
+ # Configure OCS
  echo -e "Configuring OCS Panel Files..."
  InstPanel
  
