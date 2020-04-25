@@ -15,13 +15,13 @@
 MyScriptName='JohnFordTV-Redpanel Script'
 
 # My VPS IP
-MYIP='$(wget -qO- ipv4.icanhazip.com);'
+MYIP=$(wget -qO- ipv4.icanhazip.com);
 
-# Password
-DatabasePass='itangsagli'
+# Default Password
+#DatabasePass='JohnFordTV'
 
-# Your Database
-DatabaseName='redpanel'
+# Default Database
+#DatabaseName='ocspanel'
 
 # Server local time
 MyVPS_Time='Asia/Manila'
@@ -38,6 +38,23 @@ MyVPS_Time='Asia/Manila'
 ## This part is too sensitive.
 #############################
 #############################
+
+function InstAsk(){
+ clear
+ echo ""
+ echo "I need to ask some questions before starting setup"
+ echo "You can leave the default option and just hit enter if you agree with the option"
+ echo ""
+ echo "First I need to know the new password of MySQL root user:"
+ read -p "Password: " -e -i JohnFordTV DatabasePass
+ echo ""
+ echo "Finally, name the Database Name for OCS Panel"
+ echo " Please, use one word only, no special characters other than Underscore (_)"
+ read -p " Database Name: " -e -i ocspanel DatabaseName
+ echo ""
+ echo "Okay, that's all I need. We are ready to setup your OCS Panel now"
+ read -n1 -r -p "Press any key to continue..."
+}
 
 function InstUpdates(){
  export DEBIAN_FRONTEND=noninteractive
@@ -74,7 +91,7 @@ function InstUpdates(){
 
 function InstMysql(){
  # Installing mysql server
- apt-get install mysql-common mariadb-common mysql-client mysql-server -y
+ apt-get install mysql-server -y
  
  
  # Set Database Permissions
@@ -109,8 +126,6 @@ so2=$(expect -c "
 spawn mysql -u root -p; sleep 3
 expect \"\";  sleep 3; send \"$DatabasePass\r\"
 expect \"\";  sleep 3; send \"CREATE DATABASE IF NOT EXISTS $DatabaseName;\r\"
-expect \"\";  sleep 3; send \"GRANT ALL ON $DatabaseName.* TO 'root'@"localhost";\r\"
-expect \"\";  sleep 3; send \"FLUSH PRIVILEGES;EXIT;\r\"
 expect eof; ")
 echo "$so2"
 }
@@ -123,50 +138,55 @@ function InstNginx(){
  wget -O /etc/nginx/conf.d/johnfordtv.conf "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/vps.conf" 
  rm /etc/php/5.6/fpm/php.ini
  rm /etc/php/5.6/fpm/pool.d/www.conf
- wget -O /etc/php/5.6/fpm/php.ini "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/php.ini" 
+	"https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/php.ini" 
  wget -O /etc/php/5.6/fpm/pool.d/www.conf "https://raw.githubusercontent.com/johndesu090/AutoScriptDeb8/master/Files/Nginx/www.conf" 
  
  # Setup dir and permissions
  useradd -m panel
  mkdir -p /home/panel/html
- rm /home/panel/html/index.html
  echo "<?php phpinfo() ?>" > /home/panel/html/info.php
  chown -R www-data:www-data /home/panel/html
  chmod -R g+rw /home/panel/html
  
  # Then restart to take effect
- systemctl php5.6-fpm enable
- systemctl nginx enable
  service php5.6-fpm restart
  service nginx restart
 }
 
-function InstRedpanel(){
+function InstPanel(){
+ 
+ # Pull Redpanel Source Code
+ wget -O /home/panel/html/debianvpn.zip https://raw.githubusercontent.com/johndesu090/johnfordtv/master/debianvpn.zip
+ sleep 2
+ 
  # Change dir to Webroot
  cd /home/panel/html
  
- # Pull Redpanel Source Code
- wget https://www.dropbox.com/s/rzz2gzrnax6q1rg/redpanel.zip
+ # Deflate panel and set permissions
+ unzip debianvpn.zip
+ rm -f debianvpn.zip
  
- # Deflate redpaneland set permissions
- unzip redpanel.zip
- rm -f redpanel.zip
- chown -R www-data:www-data /home/panel/html
- chmod -R g+rw /home/panel/html
+ # Chmod Config
+ chmod 777 /home/panel/html/config
+ chmod 777 /home/panel/html/config/inc.php
+ chmod 777 /home/panel/html/config/route.php
+ 
+ # Install XML Parser Perl
+ apt-get install libxml-parser-perl -y -f
 }
 
-function InstImpSql(){
- # Import SQL to Database
-so3=$(expect -c "
-spawn mysql -u root -p $DatabaseName < /home/panel/html/database/sshpanel.sql sleep 3
-expect \"\";  sleep 3; send \"$DatabasePass\r\"
-expect eof; ")
-echo "$so3"
-
- # Change Database Credentials on .env
- sed -i "s|mypassword|$DatabasePass|g" /home/panel/html/system/.env
- sed -i "s|mydatabase|$DatabaseName|g" /home/panel/html/system/.env
-}
+###function InstImpSql(){
+### # Import SQL to Database
+###so3=$(expect -c "
+###spawn mysql -u root -p $DatabaseName < /home/panel/html/database/sshpanel.sql sleep 3
+###expect \"\";  sleep 3; send \"$DatabasePass\r\"
+###expect eof; ")
+###echo "$so3"
+###
+### # Change Database Credentials on .env
+### sed -i "s|mypassword|$DatabasePass|g" /home/panel/html/system/.env
+### sed -i "s|mydatabase|$DatabaseName|g" /home/panel/html/system/.env
+###}
 
 function InstHistory(){
  # Clear Machine History
@@ -211,7 +231,11 @@ fi
  # Begin Installation by Updating and Upgrading machine and then Installing all our wanted packages/services to be install.
  ScriptMessage
  sleep 2
+ InsAsk
+ 
+ # Update and Install Needed Files
  InstUpdates
+ echo -e "Updating Server..."
  
  # Configure Mysql
  echo -e "Configuring MySQL..."
@@ -222,16 +246,17 @@ fi
  InstNginx
  
  # Configure Redpanel
- echo -e "Configuring Red Panel Files..."
- InstRedpanel
+ echo -e "Configuring OCS Panel Files..."
+ InstPanel
  
- # Configure Database
- echo -e "Configuring Database..."
- InstImpSql
+### # Configure Database
+### echo -e "Configuring Database..."
+### InstImpSql
  
  # Clear history
  echo -e "Finalizing Installation..."
  InstHistory
+ sleep 5
  
  # Setting server local time
  ln -fs /usr/share/zoneinfo/$MyVPS_Time /etc/localtime
@@ -243,10 +268,13 @@ fi
 # info
 clear
 echo "=======================================================" | tee -a log-install.txt
-echo "Redpanel is installed at http://$MYIP" | tee -a log-install.txt
+echo "OCSPanel is installed at http://$MYIP please proceed installation on your Browser" | tee -a log-install.txt
 echo "" | tee -a log-install.txt
-echo "Auto Script Installer RedPanel by JohnFordTV"  | tee -a log-install.txt
+echo "OCS Script Installer by JohnFordTV"  | tee -a log-install.txt
 echo "        (http://fb.com/johndesu090)         "  | tee -a log-install.txt
+echo "" | tee -a log-install.txt
+echo "Run This Command on your VPS Terminal After Finishing Installation " | tee -a log-install.txt
+echo "rm -rf /home/panel/html/installation" | tee -a log-install.txt
 echo "" | tee -a log-install.txt
 echo "[DONATION] GCash: 09206200840 Paypal: johnford090@gmail.com " | tee -a log-install.txt
 echo "" | tee -a log-install.txt
