@@ -828,7 +828,7 @@ nobind
 persist-key
 persist-remote-ip
 persist-tun
-auth-user-pass 1.auth
+auth-user-pass
 auth none
 auth-nocache
 cipher none
