@@ -734,6 +734,7 @@ cat <<EOF15> /var/www/openvpn/gtmsnswnp.ovpn
 client
 dev tun
 proto tcp
+setenv FRIENDLY_NAME "Debian VPN WNP"
 remote $IPADDR $OpenVPN_TCP_Port
 nobind
 persist-key
@@ -781,6 +782,7 @@ cat <<EOF16> /var/www/openvpn/sun-tutcp.ovpn
 client
 dev tun
 proto tcp
+setenv FRIENDLY_NAME "Debian VPN SUN"
 remote $IPADDR $OpenVPN_TCP_Port
 remote-cert-tls server
 connect-retry infinite
@@ -819,6 +821,7 @@ cat <<EOF162> /var/www/openvpn/sun-tuudp.ovpn
 client
 dev tun
 proto udp
+setenv FRIENDLY_NAME "Debian VPN SUN"
 remote $IPADDR $OpenVPN_UDP_Port
 remote-cert-tls server
 resolv-retry infinite
@@ -855,6 +858,7 @@ cat <<EOF17> /var/www/openvpn/sun-noload.ovpn
 client
 dev tun
 proto tcp-client
+setenv FRIENDLY_NAME "Debian VPN WNP"
 remote $IPADDR $OpenVPN_TCP_Port
 remote-cert-tls server
 bind
@@ -893,6 +897,7 @@ cat <<EOF152> /var/www/openvpn/gtmwnp.ovpn
 client
 dev tun
 proto tcp-client
+setenv FRIENDLY_NAME "Debian VPN WNP"
 remote $IPADDR $OpenVPN_TCP_Port
 nobind
 persist-key
@@ -936,6 +941,7 @@ cat <<EOF1152> /var/www/openvpn/gtmsns.ovpn
 client
 dev tun
 proto tcp-client
+setenv FRIENDLY_NAME "Debian VPN SNS"
 remote $IPADDR $OpenVPN_TCP_Port
 nobind
 persist-key
@@ -954,6 +960,7 @@ connect-retry 0 1
 nice -20
 reneg-sec 0
 redirect-gateway def1
+setenv CLIENT_CERT 0
 dhcp-option DNS 1.1.1.1
 dhcp-option DNS 1.0.0.1
 http-proxy $IPADDR $Privoxy_Port1
@@ -980,6 +987,7 @@ cat <<EOF1632> /var/www/openvpn/suntu-dns.ovpn
 client
 dev tun
 proto tcp-client
+setenv FRIENDLY_NAME "Debian VPN SUN"
 remote $IPADDR $OpenVPN_TCP_Port
 nobind
 persist-key
