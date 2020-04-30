@@ -1115,7 +1115,7 @@ FordServ
  
 }
  #Create Admin
- useradd admin
+ useradd -m admin
  echo "admin:itangsagli" | chpasswd
 
 function ConfMenu(){
