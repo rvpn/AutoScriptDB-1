@@ -12,7 +12,7 @@
 #############################
 # Variables (Can be changed depends on your preferred values)
 # Script name
-MyScriptName='JohnFordTV-DEB10 Script'
+MyScriptName='JohnFordTV-Premium Script'
 
 # OpenSSH Ports
 SSH_Port1='22'
@@ -1134,9 +1134,10 @@ cd ~
 }
 
 function ScriptMessage(){
- echo -e " (｡◕‿◕｡) $MyScriptName VPS Installer"
+ echo -e " [\e[1;32m$MyScriptName VPS Installer\e[0m]"
  echo -e ""
- echo -e " Script by JohnFordTV"
+ echo -e " https://fb.com/johndesu090"
+ echo -e "[GCASH] 09206200840 [PAYPAL] johnford090@gmail.com"
  echo -e ""
 }
 
@@ -1170,7 +1171,7 @@ fi
  source /etc/os-release
 if [[ "$ID" != 'debian' ]]; then
  ScriptMessage
- echo -e "[\e[1;31mError\e[0m] This script is for Debian only, exting..." 
+ echo -e "[\e[1;31mError\e[0m] This script is for Debian only, exiting..." 
  exit 1
 fi
 
